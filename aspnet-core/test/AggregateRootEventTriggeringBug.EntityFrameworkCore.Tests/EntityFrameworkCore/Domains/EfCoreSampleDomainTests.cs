@@ -29,7 +29,8 @@ public class EfCoreSampleDomainTests : SampleDomainTests<AggregateRootEventTrigg
             await ProductRepository.InsertAsync(new Product(
                 productId,
                 [new Sku(Guid.NewGuid(), "MySku"), new Sku(Guid.NewGuid(), "MySku2")],
-                [new ProductAttribute(Guid.NewGuid(), "Attr1", [new ProductAttributeOption(Guid.NewGuid(), "Opt1"), new ProductAttributeOption(Guid.NewGuid(), "Opt2")])]
+                //[new ProductAttribute(Guid.NewGuid(), "Attr1", [new ProductAttributeOption(Guid.NewGuid(), "Opt1"), new ProductAttributeOption(Guid.NewGuid(), "Opt2")])]
+                [new ProductAttribute(Guid.NewGuid(), "Attr1")]
                 ),
                 true
             );

@@ -105,13 +105,13 @@ public class AggregateRootEventTriggeringBugDbContext :
             b.ConfigureByConvention();
         });
 
-        builder.Entity<ProductAttributeOption>(b =>
-        {
-            b.ToTable(AggregateRootEventTriggeringBugConsts.DbTablePrefix + "AttributeOptions",
-                AggregateRootEventTriggeringBugConsts.DbSchema);
+        //builder.Entity<ProductAttributeOption>(b =>
+        //{
+        //    b.ToTable(AggregateRootEventTriggeringBugConsts.DbTablePrefix + "AttributeOptions",
+        //        AggregateRootEventTriggeringBugConsts.DbSchema);
 
-            b.ConfigureByConvention();
-        });
+        //    b.ConfigureByConvention();
+        //});
 
         builder.Entity<ProductHistory>(b =>
         {

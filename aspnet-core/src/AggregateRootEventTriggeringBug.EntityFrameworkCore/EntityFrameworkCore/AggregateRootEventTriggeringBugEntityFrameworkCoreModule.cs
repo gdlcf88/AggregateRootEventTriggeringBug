@@ -57,7 +57,7 @@ public class AggregateRootEventTriggeringBugEntityFrameworkCoreModule : AbpModul
         {
             options.Entity<Product>(orderOptions =>
             {
-                orderOptions.DefaultWithDetailsFunc = query => query.Include(o => o.Attributes).ThenInclude(x => x.Options).Include(o => o.Skus);
+                orderOptions.DefaultWithDetailsFunc = query => query.Include(o => o.Attributes).Include(o => o.Skus);
             });
         });
     }
