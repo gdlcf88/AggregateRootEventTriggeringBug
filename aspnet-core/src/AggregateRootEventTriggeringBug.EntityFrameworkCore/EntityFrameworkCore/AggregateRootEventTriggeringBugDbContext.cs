@@ -1,5 +1,6 @@
 ﻿using AggregateRootEventTriggeringBug.Products;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -28,8 +29,7 @@ public class AggregateRootEventTriggeringBugDbContext :
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
     public DbSet<Product> Products { get; set; }
-    public DbSet<Sku> Skus { get; set; }
-
+    public DbSet<ProductHistory> ProductHistories { get; set; }
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityDbContext and ITenantManagementDbContext
@@ -85,7 +85,7 @@ public class AggregateRootEventTriggeringBugDbContext :
             b.ToTable(AggregateRootEventTriggeringBugConsts.DbTablePrefix + "Products",
                 AggregateRootEventTriggeringBugConsts.DbSchema);
 
-            b.HasMany(x => x.Skus);
+            //b.HasMany(x => x.Skus);
             b.ConfigureByConvention();
         });
 
@@ -95,6 +95,32 @@ public class AggregateRootEventTriggeringBugDbContext :
                 AggregateRootEventTriggeringBugConsts.DbSchema);
 
             b.ConfigureByConvention();
+        });
+
+        builder.Entity<ProductAttribute>(b =>
+        {
+            b.ToTable(AggregateRootEventTriggeringBugConsts.DbTablePrefix + "Attributes",
+                AggregateRootEventTriggeringBugConsts.DbSchema);
+
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<ProductAttributeOption>(b =>
+        {
+            b.ToTable(AggregateRootEventTriggeringBugConsts.DbTablePrefix + "AttributeOptions",
+                AggregateRootEventTriggeringBugConsts.DbSchema);
+
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<ProductHistory>(b =>
+        {
+            b.ToTable(AggregateRootEventTriggeringBugConsts.DbTablePrefix + "ProductHistories",
+                AggregateRootEventTriggeringBugConsts.DbSchema);
+            b.ConfigureByConvention();
+            /* Configure more properties here */
+            b.HasIndex(x => x.ProductId);
+            b.HasIndex(x => x.ModificationTime);
         });
 
         //builder.Entity<YourEntity>(b =>
