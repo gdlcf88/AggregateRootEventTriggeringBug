@@ -1,0 +1,10 @@
+using AggregateRootEventTriggeringBug.Samples;
+using Xunit;
+
+namespace AggregateRootEventTriggeringBug.EntityFrameworkCore.Applications;
+
+[Collection(AggregateRootEventTriggeringBugTestConsts.CollectionDefinitionName)]
+public class EfCoreSampleAppServiceTests : SampleAppServiceTests<AggregateRootEventTriggeringBugEntityFrameworkCoreTestModule>
+{
+
+}

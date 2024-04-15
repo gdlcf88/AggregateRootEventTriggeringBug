@@ -1,0 +1,9 @@
+﻿using Xunit;
+
+namespace AggregateRootEventTriggeringBug.EntityFrameworkCore;
+
+[CollectionDefinition(AggregateRootEventTriggeringBugTestConsts.CollectionDefinitionName)]
+public class AggregateRootEventTriggeringBugEntityFrameworkCoreCollection : ICollectionFixture<AggregateRootEventTriggeringBugEntityFrameworkCoreFixture>
+{
+
+}

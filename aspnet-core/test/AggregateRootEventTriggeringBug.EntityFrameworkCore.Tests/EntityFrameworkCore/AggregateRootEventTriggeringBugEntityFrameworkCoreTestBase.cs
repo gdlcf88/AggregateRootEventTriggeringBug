@@ -1,0 +1,8 @@
+﻿using Volo.Abp;
+
+namespace AggregateRootEventTriggeringBug.EntityFrameworkCore;
+
+public abstract class AggregateRootEventTriggeringBugEntityFrameworkCoreTestBase : AggregateRootEventTriggeringBugTestBase<AggregateRootEventTriggeringBugEntityFrameworkCoreTestModule>
+{
+
+}
