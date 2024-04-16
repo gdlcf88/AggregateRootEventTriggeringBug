@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AggregateRootEventTriggeringBug.Products;
 using AggregateRootEventTriggeringBug.Samples;
+using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Xunit;
 
@@ -27,28 +29,50 @@ public class EfCoreSampleDomainTests : SampleDomainTests<AggregateRootEventTrigg
         await WithUnitOfWorkAsync(async () =>
         {
             await ProductRepository.InsertAsync(new Product(
-                productId,
-                [new Sku(Guid.NewGuid(), "MySku"), new Sku(Guid.NewGuid(), "MySku2")],
-                [new ProductAttribute(Guid.NewGuid(), "Attr1", [new ProductAttributeOption(Guid.NewGuid(), "Opt1"), new ProductAttributeOption(Guid.NewGuid(), "Opt2")])]
+                    productId,
+                    [new Sku(Guid.NewGuid(), "MySku"), new Sku(Guid.NewGuid(), "MySku2")],
+                    [
+                        new ProductAttribute(Guid.NewGuid(), "Attr1",
+                        [
+                            new ProductAttributeOption(Guid.NewGuid(), "Opt1"),
+                            new ProductAttributeOption(Guid.NewGuid(), "Opt2")
+                        ])
+                    ]
                 ),
                 true
             );
         });
 
         var product = await ProductRepository.GetAsync(productId);
+    }
 
-        //await WithUnitOfWorkAsync(async () =>
-        //{
-        //    var product = await ProductRepository.GetAsync(productId);
+    [Fact]
+    public async Task Should_Trigger_Aggregate_Root_Updated_Event()
+    {
+        var productId = Guid.NewGuid();
 
-        //    product.Skus.Add(new Sku(Guid.NewGuid(), "new-sku"));
+        await WithUnitOfWorkAsync(async () =>
+        {
+            await ProductRepository.InsertAsync(new Product(
+                    productId,
+                    [new Sku(Guid.NewGuid(), "MySku")],
+                    []
+                ),
+                true
+            );
+        });
 
-        //    await ProductRepository.UpdateAsync(product, true);
-        //});
+        (await ProductHistoryRepository.GetCountAsync()).ShouldBe(0);
 
-        //await WithUnitOfWorkAsync(async () =>
-        //{
-        //    (await ProductHistoryRepository.GetCountAsync()).ShouldBeGreaterThan(0);
-        //});
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var product = await ProductRepository.GetAsync(productId);
+
+            product.Skus.First().Name = "new-sku-name";
+
+            await ProductRepository.UpdateAsync(product, true);
+        });
+
+        (await ProductHistoryRepository.GetCountAsync()).ShouldBe(1);
     }
 }
